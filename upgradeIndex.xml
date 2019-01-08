@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><upgradeIndex>
+<package>
+<name>CEMS-SERVICE-DATAPROCESS</name>
+<serviceCode>00FF0A00</serviceCode>
+<version>2019010400</version>
+<serviceType>1</serviceType>
+<crc/>
+<description>shnegji
+升级测试</description>
+</package>
+<config>
+<file filename="fastdfs.properties">
+<property key="111" value="aaa"/>
+<property key="222" value="sss"/>
+<property key="333" value="ddd"/>
+</file>
+<file filename="jdbc.properties">
+<property key="123123" value="444"/>
+<property key="444" value="555"/>
+</file>
+</config>
+<conf/>
+<libs isReplaceDirectory="false">
+<lib destPath="" srcPath="123"/>
+<lib destPath="vsf-utils-1.0-SNAPSHOT.jar" srcPath="123"/>
+<lib destPath="" srcPath="qwe"/>
+</libs>
+</upgradeIndex>
