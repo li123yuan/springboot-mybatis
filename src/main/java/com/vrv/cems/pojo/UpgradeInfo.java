@@ -19,9 +19,20 @@ public class UpgradeInfo {
     private String changeLibFileString;
     private ArrayList<Map<String, String>> changeLibFile;
     private ArrayList<Map<String, Object>> fileTreeNode;
+    //是否升级policy.xml  1-是  2-否
+    private String isUpgradePolicyXml;
+
+    public String getIsUpgradePolicyXml() {
+        return isUpgradePolicyXml;
+    }
+
+    public void setIsUpgradePolicyXml(String isUpgradePolicyXml) {
+        this.isUpgradePolicyXml = isUpgradePolicyXml;
+    }
 
     public String getInputInstallPackFile() {
         return inputInstallPackFile;
+
     }
 
     public void setInputInstallPackFile(String inputInstallPackFile) {
@@ -116,7 +127,10 @@ public class UpgradeInfo {
         this.fileTreeNode = fileTreeNode;
     }
 
-    public UpgradeInfo(String inputInstallPackFile, String serviceName, String serviceCode, String inputUpgradePackCode, String radioServiceType, String upgradeDesc, ArrayList<Map<String, String>> configFiles, ArrayList<Map<String, String>> confFiles, String isReplaceDirectory, String changeLibFileString, ArrayList<Map<String, String>> changeLibFile, ArrayList<Map<String, Object>> fileTreeNode) {
+    public UpgradeInfo() {
+    }
+
+    public UpgradeInfo(String inputInstallPackFile, String serviceName, String serviceCode, String inputUpgradePackCode, String radioServiceType, String upgradeDesc, ArrayList<Map<String, String>> configFiles, ArrayList<Map<String, String>> confFiles, String isReplaceDirectory, String changeLibFileString, ArrayList<Map<String, String>> changeLibFile, ArrayList<Map<String, Object>> fileTreeNode, String isUpgradePolicyXml) {
         this.inputInstallPackFile = inputInstallPackFile;
         this.serviceName = serviceName;
         this.serviceCode = serviceCode;
@@ -129,10 +143,6 @@ public class UpgradeInfo {
         this.changeLibFileString = changeLibFileString;
         this.changeLibFile = changeLibFile;
         this.fileTreeNode = fileTreeNode;
+        this.isUpgradePolicyXml = isUpgradePolicyXml;
     }
-
-    public UpgradeInfo() {
-    }
-
-
 }

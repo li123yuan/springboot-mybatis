@@ -87,30 +87,39 @@ public class makeUpgradePackController {
         File installFile = new File(upgradeInfo.getInputInstallPackFile());;
         String installPackParentDir = installFile.getParent();
         System.out.println("安装包父级目录 -- " + installPackParentDir);
-        String upgradeDir = installPackParentDir + "\\upgrade";  //升级包目录和安装包目录同级
+
+        String upgradeDir = installPackParentDir + "\\upgrade_"+ upgradeInfo.getServiceName();  //升级包目录和安装包目录同级
         System.out.println("升级包目录 -- " + upgradeDir);
         try{
-            FileControl.createPath(installPackParentDir, "upgrade"); //创建升级根目录
-            FileControl.deleteDir(installPackParentDir + "\\upgrade\\" + upgradeInfo.getServiceName()); //先删除原有升级服务文件目录
-            FileControl.createPath(installPackParentDir + "\\upgrade", upgradeInfo.getServiceName()); //创建升级服务文件目录
+            FileControl.createPath(installPackParentDir, "upgrade_"+ upgradeInfo.getServiceName()); //创建升级根目录
+//            FileControl.deleteDir(installPackParentDir + "\\upgrade\\" + upgradeInfo.getServiceName()); //先删除原有升级服务文件目录
+//            FileControl.createPath(installPackParentDir + "\\upgrade", upgradeInfo.getServiceName()); //创建升级服务文件目录
+            FileControl.deleteDir(upgradeDir + "\\" + upgradeInfo.getServiceName()); //先删除原有升级服务文件目录
+            FileControl.createPath(upgradeDir,upgradeInfo.getServiceName()); //创建升级服务文件目录
             for(int i=0; i<upgradeInfo.getFileTreeNode().size(); i++) {
                 Map<String, Object> upgradeSrcFileMap = upgradeInfo.getFileTreeNode().get(i);
                 File upgradeSrcFile = new File(upgradeSrcFileMap.get("path").toString());
 //                String upgradeFileName = upgradeFile.getName();
 
 //                upgradeDir = upgradeDir.replace("\\", "/");
-
-                System.out.println("升级包根目录22 -- " + upgradeDir);
-                System.out.println("安装包中原文件路径33 -- " + upgradeSrcFile);
-                String destUpgradeFile = upgradeSrcFile.getPath().replace(installPackParentDir, upgradeDir);
-                System.out.println("升级包中目标文件路径44 -- " + destUpgradeFile);
                 if (upgradeSrcFile.exists()) {
-                    if (upgradeSrcFile.isDirectory()) {
-                        FileControl.createPath(destUpgradeFile.replace(upgradeSrcFile.getName(), ""), upgradeSrcFile.getName());
+                    //如果是policy.xml，并且是不升级的话，此处忽略policy.xml文件，不做复制操作
+                    if (upgradeSrcFile.getName().equals("policy.xml") && upgradeInfo.getIsUpgradePolicyXml().equals("2")) {
+
+                    }else {
+                        System.out.println("升级包根目录22 -- " + upgradeDir);
+                        System.out.println("安装包中原文件路径33 -- " + upgradeSrcFile);
+                        String destUpgradeFile = upgradeSrcFile.getPath().replace(installPackParentDir, upgradeDir);
+                        System.out.println("升级包中目标文件路径44 -- " + destUpgradeFile);
+
+                        if (upgradeSrcFile.isDirectory()) {
+                            FileControl.createPath(destUpgradeFile.replace(upgradeSrcFile.getName(), ""), upgradeSrcFile.getName());
+                        }
+                        else if(upgradeSrcFile.isFile()) {
+                            FileControl.copyFile(upgradeSrcFile.getPath(), destUpgradeFile);
+                        }
                     }
-                    else if(upgradeSrcFile.isFile()) {
-                        FileControl.copyFile(upgradeSrcFile.getPath(), destUpgradeFile);
-                    }
+
                 }
             }
 

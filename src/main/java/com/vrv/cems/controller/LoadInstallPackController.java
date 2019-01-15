@@ -5,7 +5,9 @@ import com.vrv.cems.utils.Json;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.util.*;
 
 @RestController
@@ -18,10 +20,19 @@ public class LoadInstallPackController {
     public Map<String, Object> loadInstallPack(@RequestParam("paramPath") String filePath) {
         List<Object> allFiles = new ArrayList();
         allFiles = traverseFolder(filePath);
-        if (allFiles == null || allFiles.size() == 0) {
+
+        Map<String, String> info = new HashMap<String, String>();
+        info = getConfigInfo(filePath);
+
+        Map<String, Object> returnMapData = new HashMap<String, Object>();
+        returnMapData.put("installPackFileList", allFiles);
+        returnMapData.put("installConfigInfo", info);
+
+
+        if (returnMapData == null || returnMapData.size() == 0) {
             return Json.fail();
         } else {
-            return Json.success(allFiles);
+            return Json.success(returnMapData);
         }
     }
 
@@ -61,4 +72,26 @@ public class LoadInstallPackController {
             return null;
         }
     }
+
+    public static Map<String, String> getConfigInfo(String filePath)
+    {
+        Map<String, String> info = new HashMap<String, String>();
+        try{
+            Properties properties = new Properties();
+            // 使用InPutStream流读取properties文件
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath + "\\config\\config.properties"));
+            properties.load(bufferedReader);
+            // 获取key对应的value值
+
+            info.put("serviceName", properties.getProperty("service.name"));
+            info.put("serviceCode", properties.getProperty("service.code"));
+            info.put("serviceVersion", properties.getProperty("service.version"));
+
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("读取config.properties文件失败");
+        }
+        return info;
+    }
+
 }
