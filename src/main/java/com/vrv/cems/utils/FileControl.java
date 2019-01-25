@@ -115,7 +115,7 @@ public class FileControl {
 
     /**
      * 递归删除目录下的所有文件及子目录下所有文件
-     * @param dir 将要删除的文件目录
+     * @param url 将要删除的文件目录
      * @return boolean Returns "true" if all deletions were successful.
      *                 If a deletion fails, the method stops attempting to
      *                 delete and returns "false".
@@ -127,7 +127,7 @@ public class FileControl {
             if (dir.isDirectory()) {
                 String[] children = dir.list();  //递归删除目录中的子目录下
                 for (int i = 0; i < children.length; i++) {
-                    boolean success = deleteDir(dir + "\\" + children[i]);
+                    boolean success = deleteDir(dir + "/" + children[i]);
                     if (!success) {
                         return false;
                     }
@@ -141,9 +141,10 @@ public class FileControl {
 
     // 创建文件夹
     public static boolean createPath(String address, String folderName) throws Exception {
+        address = address.replace("\\", "/");
         File file = new File(address);
         if (!(file == null)) {
-            File newFile = new File(file.getPath() + "\\" + folderName);
+            File newFile = new File(file.getPath() + "/" + folderName);
             if (newFile.mkdirs()) {
                 System.out.println(folderName + " -- 文件夹成功创建");
                 return true;

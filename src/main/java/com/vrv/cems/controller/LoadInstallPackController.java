@@ -37,6 +37,7 @@ public class LoadInstallPackController {
     }
 
     public static List<Object> traverseFolder(String path) {
+        path = path.replace("\\", "/");
         List<Object> allFiles = new ArrayList();
         File file = new File(path);
         if (file.exists()) {
@@ -73,13 +74,13 @@ public class LoadInstallPackController {
         }
     }
 
-    public static Map<String, String> getConfigInfo(String filePath)
-    {
+    public static Map<String, String> getConfigInfo(String filePath) {
+        filePath = filePath.replace("\\", "/");
         Map<String, String> info = new HashMap<String, String>();
         try{
             Properties properties = new Properties();
             // 使用InPutStream流读取properties文件
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath + "\\config\\config.properties"));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath + "/config/config.properties"));
             properties.load(bufferedReader);
             // 获取key对应的value值
 

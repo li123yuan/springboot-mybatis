@@ -12,6 +12,7 @@ import java.util.zip.CheckedInputStream;
 public class FileCRC32 {
 
     public static String getCRC32(String fileUri) {
+        fileUri = fileUri.replace("\\", "/");
         CRC32 crc32 = new CRC32();
         FileInputStream fileinputstream = null;
         CheckedInputStream checkedinputstream = null;

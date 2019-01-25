@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8888
 
 spring:
     datasource:
@@ -10,4 +10,4 @@ spring:
         driver-class-name: com.mysql.jdbc.Driver
 mybatis:
   mapper-locations: classpath:mapping/*Mapper.xml
-  type-aliases-package: com.ocean.pojo
+  type-aliases-package: com.vrv.cems.pojo

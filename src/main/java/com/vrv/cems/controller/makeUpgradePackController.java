@@ -34,17 +34,16 @@ public class makeUpgradePackController {
         String upgradePackPath = createUpgradePackFile(upgradeInfo);
 
         File upgradePackFile = new File(upgradePackPath);
-        //将升级包打成zip包
-//        FileToZip.fileToZip(upgradePackPath, upgradePackFile.getParent(), upgradePackFile.getName());
 
-        String upgradeZipPath = upgradePackFile.getParent() +"\\" + upgradePackFile.getName()+".zip"; //服务升级包zip文件路径
+        //将升级包打成zip包
+        String upgradeZipPath = upgradePackFile.getParent() + "/" + upgradePackFile.getName()+".zip"; //服务升级包zip文件路径
         try{
             System.out.println("开始生成服务升级包zip文件");
             ZipUtil.zip(upgradePackPath, upgradeZipPath);
             System.out.println("生成服务升级包zip文件完成");
         } catch(Exception e){
             e.printStackTrace();
-            System.err.println("打zip包异常");
+            System.err.println("打服务升级包zip包异常");
         }
 
         //计算crc
@@ -59,7 +58,7 @@ public class makeUpgradePackController {
         try{
             System.out.println("开始生成完整升级zip包");
             String[] allUpgrradeZipFiles = new String[]{upgradeZipPath, xmlFilePath};
-            ZipUtil.zip(allUpgrradeZipFiles, upgradePackFile.getParent() +"\\" + upgradePackFile.getName() + "-" + upgradeInfo.getInputUpgradePackCode() + ".zip");
+            ZipUtil.zip(allUpgrradeZipFiles, upgradePackFile.getParent() +"/" + upgradePackFile.getName() + "-" + upgradeInfo.getInputUpgradePackCode() + ".zip");
             System.out.println("生成完整升级zip包完成");
         } catch(Exception e){
             e.printStackTrace();
@@ -88,20 +87,16 @@ public class makeUpgradePackController {
         String installPackParentDir = installFile.getParent();
         System.out.println("安装包父级目录 -- " + installPackParentDir);
 
-        String upgradeDir = installPackParentDir + "\\upgrade_"+ upgradeInfo.getServiceName();  //升级包目录和安装包目录同级
+        String upgradeDir = installPackParentDir + "/upgrade_"+ upgradeInfo.getServiceName();  //升级包目录和安装包目录同级
         System.out.println("升级包目录 -- " + upgradeDir);
         try{
             FileControl.createPath(installPackParentDir, "upgrade_"+ upgradeInfo.getServiceName()); //创建升级根目录
-//            FileControl.deleteDir(installPackParentDir + "\\upgrade\\" + upgradeInfo.getServiceName()); //先删除原有升级服务文件目录
-//            FileControl.createPath(installPackParentDir + "\\upgrade", upgradeInfo.getServiceName()); //创建升级服务文件目录
-            FileControl.deleteDir(upgradeDir + "\\" + upgradeInfo.getServiceName()); //先删除原有升级服务文件目录
+            FileControl.deleteDir(upgradeDir + "/" + upgradeInfo.getServiceName()); //先删除原有升级服务文件目录
             FileControl.createPath(upgradeDir,upgradeInfo.getServiceName()); //创建升级服务文件目录
             for(int i=0; i<upgradeInfo.getFileTreeNode().size(); i++) {
                 Map<String, Object> upgradeSrcFileMap = upgradeInfo.getFileTreeNode().get(i);
                 File upgradeSrcFile = new File(upgradeSrcFileMap.get("path").toString());
-//                String upgradeFileName = upgradeFile.getName();
 
-//                upgradeDir = upgradeDir.replace("\\", "/");
                 if (upgradeSrcFile.exists()) {
                     //如果是policy.xml，并且是不升级的话，此处忽略policy.xml文件，不做复制操作
                     if (upgradeSrcFile.getName().equals("policy.xml") && upgradeInfo.getIsUpgradePolicyXml().equals("2")) {
@@ -127,13 +122,14 @@ public class makeUpgradePackController {
             e.printStackTrace();
             System.out.println("组装升级文件失败");
         }
-        return upgradeDir +"\\"+ installFile.getName();
+        return upgradeDir +"/"+ installFile.getName();
     }
 
     /**
      * 生成升级索引xml
      */
     public static String createXml(UpgradeInfo upgradeInfo, String crc32, String upgradePackFile) {
+        upgradePackFile = upgradePackFile.replace("\\", "/");
         try {
             // 创建解析器工厂
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -237,12 +233,11 @@ public class makeUpgradePackController {
             // 输出内容是否使用换行
             tf.setOutputProperty(OutputKeys.INDENT, "yes");
             // 创建xml文件并写入内容
-            System.out.println(upgradePackFile + "\\upgradeIndex.xml");
+            System.out.println(upgradePackFile + "/upgradeIndex.xml");
 
-            String xmlFilePath = (upgradePackFile + "\\upgradeIndex.xml").replace("\\", "/");
+            String xmlFilePath = upgradePackFile + "/upgradeIndex.xml";
 
             FileControl.deleteFile(xmlFilePath);
-//            File xmlFile = new File("D:\\upgradeIndex.xml");
             File xmlFile = new File(xmlFilePath);
 //            tf.transform(new DOMSource(document), new StreamResult(new File( "upgradeIndex.xml")));
             tf.transform(new DOMSource(document), new StreamResult(xmlFile));
