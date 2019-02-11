@@ -1,5 +1,5 @@
 server:
-  port: 8888
+  port: 8080
 
 spring:
     datasource:
@@ -11,3 +11,4 @@ spring:
 mybatis:
   mapper-locations: classpath:mapping/*Mapper.xml
   type-aliases-package: com.vrv.cems.pojo
+#logging.config=classpath:logback-boot.xml
